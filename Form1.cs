@@ -1,5 +1,3 @@
-using System.Security.Permissions;
-
 namespace LW2Graphics
 {
     public partial class Form1 : Form
@@ -10,8 +8,8 @@ namespace LW2Graphics
         private Point[] picturePoints;
         private Point center;
         private bool centerPosition; // Расположение объекта (True - по центру; False - произвольное)
-        private enum Action { None, Movement, Turn };
-        private Action curAction ;
+        private enum Action { None, Movement, Turn, Resize };
+        private Action curAction;
 
         public Form1()
         {
@@ -33,7 +31,12 @@ namespace LW2Graphics
             DrawFigure();
         }
 
-        private void MakeInvisible() => Array.ForEach(visibleObjects, item => item.Visible = false);
+        private void MakeInvisible()
+        {
+            Array.ForEach(visibleObjects, item => item.Visible = false);
+            input1.Text = string.Empty;
+            input2.Text = string.Empty;
+        }
 
         // ---------- Отрисовка фигуры
 
@@ -99,7 +102,7 @@ namespace LW2Graphics
             inputLabel2.Text = "На сколько вы хотите изменить y?";
             curAction = Action.Movement;
         }
-        
+
         private void ChangePosition()
         {
             // Реализует "движение" объекта
@@ -155,6 +158,37 @@ namespace LW2Graphics
             MakeAbsoluteCoordinates();
         }
 
+        // ---------- Аффинное преобразование "Растяжение/сжатие"
+
+        private void ChangeSizeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MakeInvisible();
+
+            inputLabel1.Visible = true;
+            input1.Visible = true;
+            applyButton.Visible = true;
+            inputLabel1.Text = "Введите коэффициент растяжения (сжатия)";
+            curAction = Action.Resize;
+        }
+
+        private void ResizeObject()
+        {
+            // Реализует "растяжение/сжатие" объекта
+            double k;
+            if (!double.TryParse(input1.Text, out k))
+            {
+                MessageBox.Show("Не получилось распознать входные данные.", "ERROR");
+                return;
+            }
+            MakeRelativeCoordinates();
+            for (int i = 0; i != picturePoints.Length; i++)
+            {
+                picturePoints[i].X = (int)Math.Round(picturePoints[i].X / k);
+                picturePoints[i].Y = (int)Math.Round(picturePoints[i].Y / k);
+            }
+            MakeAbsoluteCoordinates();
+        }
+
         // ---------- Работа с координатами
 
         private void MakeRelativeCoordinates()
@@ -189,6 +223,9 @@ namespace LW2Graphics
                 case Action.Turn:
                     FlipObject();
                     break;
+                case Action.Resize:
+                    ResizeObject();
+                    break;
             }
             DrawFigure();
         }
@@ -211,6 +248,32 @@ namespace LW2Graphics
             ChangeBitmapSize(centerPosition);
         }
 
-        
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && curAction != Action.None)
+            {
+                applyButton.PerformClick();
+            }
+        }
+
+        private void pictureBox_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                contextMenuStrip.Show(PointToScreen(e.Location));
+            }
+        }
+
+        private void RestoreInitialObject_Click(object sender, EventArgs e)
+        {
+            center = new Point(pictureBox.Width / 2, pictureBox.Height / 2);
+            picturePoints = [new(center.X - 100, center.Y - 200),
+                             new(center.X + 100, center.Y - 200),
+                             new(center.X + 200, center.Y),
+                             new(center.X + 100, center.Y + 200),
+                             new(center.X - 100, center.Y + 200),
+                             new(center.X - 200, center.Y)];
+            DrawFigure();
+        }
     }
 }

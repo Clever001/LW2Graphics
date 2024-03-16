@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             panel1 = new Panel();
             objectPositionlabel = new Label();
             placeObjectButton = new Button();
@@ -43,9 +44,12 @@
             flipObjectToolStripMenuItem = new ToolStripMenuItem();
             changeSizeToolStripMenuItem = new ToolStripMenuItem();
             pictureBox = new PictureBox();
+            contextMenuStrip = new ContextMenuStrip(components);
+            restoreInitialObject = new ToolStripMenuItem();
             panel1.SuspendLayout();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
+            contextMenuStrip.SuspendLayout();
             SuspendLayout();
             // 
             // panel1
@@ -89,6 +93,7 @@
             placeObjectButton.Text = "По центру";
             placeObjectButton.UseVisualStyleBackColor = false;
             placeObjectButton.Click += PlaceObjectButton_Click;
+            placeObjectButton.KeyDown += Form1_KeyDown;
             // 
             // applyButton
             // 
@@ -120,13 +125,14 @@
             input2.Size = new Size(100, 23);
             input2.TabIndex = 4;
             input2.Visible = false;
+            input2.KeyDown += Form1_KeyDown;
             // 
             // inputLabel1
             // 
             inputLabel1.Font = new Font("Segoe UI", 12F);
-            inputLabel1.Location = new Point(40, 163);
+            inputLabel1.Location = new Point(26, 163);
             inputLabel1.Name = "inputLabel1";
-            inputLabel1.Size = new Size(100, 107);
+            inputLabel1.Size = new Size(128, 107);
             inputLabel1.TabIndex = 3;
             inputLabel1.Text = "Ввод первого значения";
             inputLabel1.TextAlign = ContentAlignment.MiddleCenter;
@@ -139,6 +145,7 @@
             input1.Size = new Size(100, 23);
             input1.TabIndex = 2;
             input1.Visible = false;
+            input1.KeyDown += Form1_KeyDown;
             // 
             // startLabel
             // 
@@ -189,6 +196,7 @@
             changeSizeToolStripMenuItem.Name = "changeSizeToolStripMenuItem";
             changeSizeToolStripMenuItem.Size = new Size(204, 22);
             changeSizeToolStripMenuItem.Text = "Сжать (разжать) объект";
+            changeSizeToolStripMenuItem.Click += ChangeSizeToolStripMenuItem_Click;
             // 
             // pictureBox
             // 
@@ -198,6 +206,20 @@
             pictureBox.Size = new Size(859, 715);
             pictureBox.TabIndex = 1;
             pictureBox.TabStop = false;
+            pictureBox.MouseClick += pictureBox_MouseClick;
+            // 
+            // contextMenuStrip
+            // 
+            contextMenuStrip.Items.AddRange(new ToolStripItem[] { restoreInitialObject });
+            contextMenuStrip.Name = "contextMenuStrip";
+            contextMenuStrip.Size = new Size(256, 26);
+            // 
+            // restoreInitialObject
+            // 
+            restoreInitialObject.Name = "restoreInitialObject";
+            restoreInitialObject.Size = new Size(255, 22);
+            restoreInitialObject.Text = "Восстановить начальный объект";
+            restoreInitialObject.Click += RestoreInitialObject_Click;
             // 
             // Form1
             // 
@@ -212,11 +234,13 @@
             Name = "Form1";
             Text = "ЛР2 Никончук ВИ КЭ-243";
             SizeChanged += Form1_SizeChanged;
+            KeyDown += Form1_KeyDown;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
+            contextMenuStrip.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -237,5 +261,7 @@
         private Button applyButton;
         private Button placeObjectButton;
         private Label objectPositionlabel;
+        private ContextMenuStrip contextMenuStrip;
+        private ToolStripMenuItem restoreInitialObject;
     }
 }
