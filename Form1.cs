@@ -2,9 +2,9 @@ namespace LW2Graphics
 {
     public partial class Form1 : Form
     {
-        private readonly Control[] visibleObjects;
+        private Control[] visibleObjects;
         private Bitmap bitmap;
-        private readonly Pen pen;
+        private Pen pen;
         private Point[] picturePoints;
         private Point center;
         private bool centerPosition; // Расположение объекта (True - по центру; False - произвольное)
@@ -14,7 +14,10 @@ namespace LW2Graphics
         public Form1()
         {
             InitializeComponent();
+        }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
             visibleObjects = [startLabel, inputLabel1, inputLabel2, input1, input2, applyButton];
             bitmap = new Bitmap(pictureBox.Width, pictureBox.Height);
             pictureBox.Image = bitmap;
