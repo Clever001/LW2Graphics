@@ -6,10 +6,10 @@ namespace LW2Graphics
     {
         private readonly Control[] visibleObjects;
         private Bitmap bitmap;
-        private Pen pen;
+        private readonly Pen pen;
         private Point[] picturePoints;
         private Point center;
-        private bool centerPosition; // Расположение объекта (True - по центра; False - произвольное)
+        private bool centerPosition; // Расположение объекта (True - по центру; False - произвольное)
         private enum Action { None, Movement, Turn };
         private Action curAction ;
 
@@ -135,6 +135,48 @@ namespace LW2Graphics
             curAction = Action.Turn;
         }
 
+        private void FlipObject()
+        {
+            // Реализует "поворот" объекта
+            double x;
+            if (!double.TryParse(input1.Text, out x))
+            {
+                MessageBox.Show("Не получилось распознать входные данные.", "ERROR");
+                return;
+            }
+            double rads = x * Math.PI / 180;
+            MakeRelativeCoordinates();
+            for (int i = 0; i != picturePoints.Length; i++)
+            {
+                Point tmp = picturePoints[i];
+                picturePoints[i].X = (int)Math.Round(tmp.X * Math.Cos(rads) - tmp.Y * Math.Sin(rads));
+                picturePoints[i].Y = (int)Math.Round(tmp.X * Math.Sin(rads) + tmp.Y * Math.Cos(rads));
+            }
+            MakeAbsoluteCoordinates();
+        }
+
+        // ---------- Работа с координатами
+
+        private void MakeRelativeCoordinates()
+        {
+            // Делает координаты точек относительными
+            for (int i = 0; i != picturePoints.Length; i++)
+            {
+                picturePoints[i].X -= center.X;
+                picturePoints[i].Y -= center.Y;
+            }
+        }
+
+        private void MakeAbsoluteCoordinates()
+        {
+            // Делает абсолютные координаты
+            for (int i = 0; i != picturePoints.Length; i++)
+            {
+                picturePoints[i].X += center.X;
+                picturePoints[i].Y += center.Y;
+            }
+        }
+
         // ---------- Реализация работы кнопок на форме
 
         private void ApplyButton_Click(object sender, EventArgs e)
@@ -145,7 +187,7 @@ namespace LW2Graphics
                     ChangePosition();
                     break;
                 case Action.Turn:
-                    MessageBox.Show("Аффинное преобразование \"Поворот\" пока что не реализовано.");
+                    FlipObject();
                     break;
             }
             DrawFigure();
