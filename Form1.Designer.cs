@@ -88,7 +88,7 @@
             placeObjectButton.TabIndex = 7;
             placeObjectButton.Text = "По центру";
             placeObjectButton.UseVisualStyleBackColor = false;
-            placeObjectButton.Click += placeObjectButton_Click;
+            placeObjectButton.Click += PlaceObjectButton_Click;
             // 
             // applyButton
             // 

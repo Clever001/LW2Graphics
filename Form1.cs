@@ -10,6 +10,8 @@ namespace LW2Graphics
         private Point[] picturePoints;
         private Point center;
         private bool centerPosition; // Расположение объекта (True - по центра; False - произвольное)
+        private enum Action { None, Movement, Turn };
+        private Action curAction ;
 
         public Form1()
         {
@@ -27,8 +29,13 @@ namespace LW2Graphics
                              new(center.X - 100, center.Y + 200),
                              new(center.X - 200, center.Y)];
             centerPosition = true;
+            curAction = Action.None;
             DrawFigure();
         }
+
+        private void MakeInvisible() => Array.ForEach(visibleObjects, item => item.Visible = false);
+
+        // ---------- Отрисовка фигуры
 
         private void DrawFigure()
         {
@@ -45,11 +52,13 @@ namespace LW2Graphics
                     g.DrawLine(pen, picturePoints[0], picturePoints[i]);
                 }
             }
-            if (center.X >= 0 && center.Y >= 0)
+            if (center.X >= 0 && center.Y >= 0 && center.X <= pictureBox.Width && center.Y <= pictureBox.Height)
                 bitmap.SetPixel(center.X, center.Y, Color.Red);
             g.Flush();
             pictureBox.Invalidate();
         }
+
+        // ---------- Изменение размеров bitmap
 
         private void Form1_SizeChanged(object sender, EventArgs e)
         {
@@ -74,8 +83,11 @@ namespace LW2Graphics
             DrawFigure();
         }
 
+        // ---------- Аффинное преобразование "Движение"
+
         private void ChangePositionToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // Добавляет необходимые объекты на форму
             MakeInvisible(); // Сначала делаем все объекта невидимыми. Потом добавляем необходимые.
 
             inputLabel1.Visible = true;
@@ -85,22 +97,12 @@ namespace LW2Graphics
             applyButton.Visible = true;
             inputLabel1.Text = "На сколько вы хотите изменить x?";
             inputLabel2.Text = "На сколько вы хотите изменить y?";
+            curAction = Action.Movement;
         }
-
-        private void FlipObjectToolStripMenuItem_Click(object sender, EventArgs e)
+        
+        private void ChangePosition()
         {
-            MakeInvisible();
-
-            inputLabel1.Visible = true;
-            input1.Visible = true;
-            applyButton.Visible = true;
-            inputLabel1.Text = "Введите угол поворота (в градусах)";
-        }
-
-        private void MakeInvisible() => Array.ForEach(visibleObjects, item => item.Visible = false);
-
-        private void ApplyButton_Click(object sender, EventArgs e)
-        {
+            // Реализует "движение" объекта
             int dx, dy;
             if (!int.TryParse(input1.Text, out dx) || !int.TryParse(input2.Text, out dy))
             {
@@ -118,10 +120,38 @@ namespace LW2Graphics
                 picturePoints[i].X += dx;
                 picturePoints[i].Y += dy;
             }
+        }
+
+        // ---------- Аффинное преобразование "Поворот"
+
+        private void FlipObjectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MakeInvisible();
+
+            inputLabel1.Visible = true;
+            input1.Visible = true;
+            applyButton.Visible = true;
+            inputLabel1.Text = "Введите угол поворота (в градусах)";
+            curAction = Action.Turn;
+        }
+
+        // ---------- Реализация работы кнопок на форме
+
+        private void ApplyButton_Click(object sender, EventArgs e)
+        {
+            switch (curAction)
+            {
+                case Action.Movement:
+                    ChangePosition();
+                    break;
+                case Action.Turn:
+                    MessageBox.Show("Аффинное преобразование \"Поворот\" пока что не реализовано.");
+                    break;
+            }
             DrawFigure();
         }
 
-        private void placeObjectButton_Click(object sender, EventArgs e)
+        private void PlaceObjectButton_Click(object sender, EventArgs e)
         {
             centerPosition = !centerPosition;
             if (centerPosition)
