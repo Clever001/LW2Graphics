@@ -14,10 +14,6 @@ namespace LW2Graphics
         public Form1()
         {
             InitializeComponent();
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
             visibleObjects = [startLabel, inputLabel1, inputLabel2, input1, input2, applyButton];
             bitmap = new Bitmap(pictureBox.Width, pictureBox.Height);
             pictureBox.Image = bitmap;
@@ -170,7 +166,7 @@ namespace LW2Graphics
             inputLabel1.Visible = true;
             input1.Visible = true;
             applyButton.Visible = true;
-            inputLabel1.Text = "Введите коэффициент растяжения (сжатия)";
+            inputLabel1.Text = "Введите коэффициент сжатия (растяжения)";
             curAction = Action.Resize;
         }
 

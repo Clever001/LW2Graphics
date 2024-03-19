@@ -85,10 +85,10 @@
             placeObjectButton.BackColor = Color.FromArgb(0, 192, 0);
             placeObjectButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             placeObjectButton.ForeColor = Color.FromArgb(128, 255, 128);
-            placeObjectButton.Location = new Point(118, 733);
+            placeObjectButton.Location = new Point(103, 733);
             placeObjectButton.Margin = new Padding(3, 4, 3, 4);
             placeObjectButton.Name = "placeObjectButton";
-            placeObjectButton.Size = new Size(160, 53);
+            placeObjectButton.Size = new Size(192, 53);
             placeObjectButton.TabIndex = 7;
             placeObjectButton.Text = "По центру";
             placeObjectButton.UseVisualStyleBackColor = false;
@@ -111,9 +111,9 @@
             // inputLabel2
             // 
             inputLabel2.Font = new Font("Segoe UI", 12F);
-            inputLabel2.Location = new Point(246, 217);
+            inputLabel2.Location = new Point(230, 217);
             inputLabel2.Name = "inputLabel2";
-            inputLabel2.Size = new Size(114, 143);
+            inputLabel2.Size = new Size(146, 143);
             inputLabel2.TabIndex = 5;
             inputLabel2.Text = "Ввод второго значения";
             inputLabel2.TextAlign = ContentAlignment.MiddleCenter;
@@ -152,12 +152,11 @@
             // 
             // startLabel
             // 
-            startLabel.AutoSize = true;
             startLabel.Font = new Font("Microsoft YaHei UI", 14F, FontStyle.Bold);
-            startLabel.Location = new Point(90, 148);
-            startLabel.MaximumSize = new Size(229, 0);
+            startLabel.Location = new Point(60, 141);
+            startLabel.MaximumSize = new Size(300, 0);
             startLabel.Name = "startLabel";
-            startLabel.Size = new Size(174, 155);
+            startLabel.Size = new Size(300, 136);
             startLabel.TabIndex = 1;
             startLabel.Text = "Выберите действие, которое необходимо выполнить";
             startLabel.TextAlign = ContentAlignment.TopCenter;
@@ -237,7 +236,6 @@
             MinimumSize = new Size(1397, 990);
             Name = "Form1";
             Text = "ЛР2 Никончук ВИ КЭ-243";
-            Load += Form1_Load;
             SizeChanged += Form1_SizeChanged;
             KeyDown += Form1_KeyDown;
             panel1.ResumeLayout(false);
